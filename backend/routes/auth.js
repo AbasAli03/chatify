@@ -1,5 +1,6 @@
 import express from "express";
 import User from "../models/User.js"
+import bcrypt from "bcryptjs";
 
 const router = express.Router();
 
@@ -16,28 +17,53 @@ router.post("/signup", async (req,res) => {
    }
 
    // hash paswords with bcrypt
+   const salt = await bcrypt.genSalt(10);
+   const hashedPassword = await bcrypt.hash(password,salt);
 
    const newUser =  User({
-      fullname,
-      username,
-      password,
+      fullname:fullname,
+      username: username,
+      password: hashedPassword,
       profilePic: "",
    });
+   
+   if(newUser){
+      await newUser.save();
 
-   await newUser.save();
-
-   res.status(201).send(newUser);
+      res.status(201).send({
+         id: newUser._id,
+         name: fullname,
+         username: username,
+      });
+   }
+ 
 
    
    
 })
 
-router.post("/login", (req,res) => {
-   console.log("login route");
-})
+router.post("/login",async (req,res) => {
+      try {
+         const {username, password} = req.body;
+   
+         const exists = await User.findOne({username})
+         const succes = await bcrypt.compare(password,exists.password);
+   
+         if(!exists || !succes){
+            return res.status(400).json({error: "username/password doesnt match"});
+         }
+    
+         res.status(201).json({
+            id: exists._id,
+            username: username,
+         });
+      } catch (error) {
+         
+      }
+});
 
 router.post("/logout", (req,res) => {
-    console.log("logout route");
+   res.status(200).json({message: "logged out success fully"})
 
 })
 
