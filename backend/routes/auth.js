@@ -1,6 +1,7 @@
 import express from "express";
 import User from "../models/User.js"
 import bcrypt from "bcryptjs";
+import generateJWT from "../utils/generateJwt.js";
 
 const router = express.Router();
 
@@ -28,6 +29,7 @@ router.post("/signup", async (req,res) => {
    });
    
    if(newUser){
+      generateJWT(newUser._id,res);
       await newUser.save();
 
       res.status(201).send({
@@ -52,10 +54,14 @@ router.post("/login",async (req,res) => {
          if(!exists || !succes){
             return res.status(400).json({error: "username/password doesnt match"});
          }
+         
+         generateJWT(exists._id,res);
+
     
          res.status(201).json({
             id: exists._id,
-            username: username,
+            name: exists.fullname,
+            username: username
          });
       } catch (error) {
          
@@ -63,6 +69,7 @@ router.post("/login",async (req,res) => {
 });
 
 router.post("/logout", (req,res) => {
+   res.cookie('jwt',"",{maxAge: 0});
    res.status(200).json({message: "logged out success fully"})
 
 })
