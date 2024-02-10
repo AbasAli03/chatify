@@ -15,7 +15,7 @@ dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 app.use("/api/auth", auth);
-app.use("/api/messages", protectRoute, message);
+app.use("/api/messages", message);
 
 
 app.listen(5000,() =>{

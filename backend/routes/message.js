@@ -1,5 +1,6 @@
 import express from "express";
 import Message from "../models/Message.js";
+import User from "../models/User.js";
 import Chat from "../models/Chat.js";
 import protectRoute from "../middleware/protectRoute.js";
 
@@ -39,6 +40,33 @@ router.post("/send/:id", protectRoute, async (req, res) => {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
     }
+});
+
+router.get("/get/:id", protectRoute, async (req, res) => {
+        const receiverId = req.params.id; 
+        const senderId = req.user._id; 
+
+        const chat = await Chat.findOne({
+            participants: { $all: [senderId, receiverId] },
+        });
+
+        if(!chat) return res.status(404).json({error: "Chat doesnt exists"});
+        
+        const messagePromises = chat.messages.map((id) => Message.findById(id));
+        const messages = await Promise.all(messagePromises);
+        // format the messages
+        const reciever = await User.findById(receiverId);
+
+        const formattedMessages = messages.map((message) => ({
+            sender: req.user.username,
+            reciever: reciever.username,
+            message: message.content,
+            time: new Date(message.createdAt).toLocaleString(),
+        }));
+
+        return res.status(201).json(formattedMessages);
+
+
 });
 
 export default router;
