@@ -63,6 +63,8 @@ router.post("/login",async (req,res) => {
             name: exists.fullname,
             username: username
          });
+
+         console.log("logged in ");
       } catch (error) {
          
       }
