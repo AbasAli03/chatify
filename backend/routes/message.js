@@ -42,7 +42,7 @@ router.post("/send/:id", protectRoute, async (req, res) => {
     }
 });
 
-router.get("/get/:id", protectRoute, async (req, res) => {
+router.get("/:id", protectRoute, async (req, res) => {
         const receiverId = req.params.id; 
         const senderId = req.user._id; 
 
