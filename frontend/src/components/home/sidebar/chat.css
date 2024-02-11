@@ -1,0 +1,27 @@
+.chat {
+  width: 90%;
+  height: 50px;
+  position: relative;
+  border-bottom: 1px solid black;
+  padding: 5px;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.chat__username .chat__lastMessage {
+  padding: 5px;
+}
+.chat__username {
+  margin-bottom: 5px;
+}
+.chat__lastMessage {
+  display: flex;
+  justify-content: space-between;
+}
+
+.chat:hover {
+  color: white;
+  background-color: black;
+  cursor: pointer;
+}

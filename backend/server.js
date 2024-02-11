@@ -1,8 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
-import auth from "./routes/auth.js"
-import message from "./routes/message.js"
-import chat from "./routes/chat.js"
+import auth from "./routes/auth.js";
+import message from "./routes/message.js";
+import chat from "./routes/chat.js";
 import cors from "cors";
 import connectToMongoDB from "./db/connectToMongoDB.js";
 import cookieParser from "cookie-parser";
@@ -19,9 +19,7 @@ app.use("/api/auth", auth);
 app.use("/api/messages", message);
 app.use("/api/chats", chat);
 
-
-
-app.listen(5000,() =>{
-    connectToMongoDB();
-    console.log("server is runnning  ON ", PORT)
-} );
+app.listen(5000, () => {
+  connectToMongoDB();
+  console.log("server is runnning  ON ", PORT);
+});

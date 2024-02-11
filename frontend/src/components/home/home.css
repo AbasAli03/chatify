@@ -1,0 +1,19 @@
+.home {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 15px;
+  border: 1px solid black;
+}
+
+.home__chats {
+  flex: 1 1 30%;
+  height: 400px;
+}
+
+.home__activeChat {
+  flex: 1 1 70%;
+  height: 400px;
+}

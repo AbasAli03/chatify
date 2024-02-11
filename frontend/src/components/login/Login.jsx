@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "./login.css";
 
 const login = () => {
@@ -44,6 +45,9 @@ const login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
+        <Link to="/signup" className="link">
+          Dont have an account?
+        </Link>
         <button className="login__button" onClick={handleLogin}>
           Login
         </button>
