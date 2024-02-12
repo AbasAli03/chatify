@@ -1,18 +1,17 @@
 import React from "react";
 import "./message.css";
+import { useAuthContext } from "../../../context/AuthContext.jsx";
 
-const Message = () => {
-  return (
-    <>
-      <div className="message message-start">
-        <div className="message-bubble">
-          It's over Anakin, <br />I have the high ground.
-        </div>
-      </div>
-      <div className="message message-end">
-        <div className="message-bubble">You underestimate my power!</div>
-      </div>
-    </>
+const Message = ({ sender, reciever, message, time }) => {
+  const { authUser } = useAuthContext();
+  return sender === authUser ? (
+    <div className="message message-start">
+      <div className="message-bubble">{message}</div>
+    </div>
+  ) : (
+    <div className="message message-end">
+      <div className="message-bubble"> {message}</div>
+    </div>
   );
 };
 
