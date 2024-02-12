@@ -3,12 +3,9 @@ import "./home.css";
 import Chat from "./sidebar/Chat.jsx";
 import SearchBar from "./sidebar/SearchBar.jsx";
 import MessageContainer from "./messages/MessageContainer.jsx";
-import {
-  ChatContextProvider,
-  useChatContext,
-} from "../../context/ChatContext.jsx";
+import { useChatContext } from "../../context/ChatContext.jsx";
 import { useState, useEffect } from "react";
-import { useAuthContext } from "../../context/authContext.jsx";
+import { useAuthContext } from "../../context/AuthContext.jsx";
 
 const Home = () => {
   const [chats, setChats] = useState([]);
