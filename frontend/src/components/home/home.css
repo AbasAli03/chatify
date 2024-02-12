@@ -10,10 +10,10 @@
 
 .home__chats {
   flex: 1 1 30%;
-  height: 400px;
+  height: 100vh;
 }
 
 .home__activeChat {
   flex: 1 1 70%;
-  height: 400px;
+  height: 100vh;
 }
