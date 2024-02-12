@@ -24,35 +24,42 @@ const MessageContainer = ({}) => {
 
     fetchData();
   }, [activeChat]);
-
-  return (
+  // add the fetching to its own hook, so you can make a loading bar
+  return activeChat ? (
     <div className="messageContainer">
-      <header className="messageContainer__header">
-        {messages[0].sender !== authUser.username
-          ? authUser.username
-          : messages[0].reciever}
-      </header>
-      <div className="messageContainer__messages">
-        {messages &&
-          messages.map((message, index) => (
-            <Message
-              key={index}
-              sender={
-                message.sender === authUser.username
-                  ? authUser.username
-                  : message.reciever
-              }
-              reciever={
-                message.sender !== authUser.username
-                  ? authUser.username
-                  : message.reciever
-              }
-              message={message.message}
-              time={message.time}
-            />
-          ))}
-      </div>
+      {messages && messages.length > 0 ? (
+        <>
+          <header className="messageContainer__header">
+            {messages[0].sender !== authUser.username
+              ? authUser.username
+              : messages[0].reciever}
+          </header>
+          <div className="messageContainer__messages">
+            {messages.map((message, index) => (
+              <Message
+                key={index}
+                sender={
+                  message.sender === authUser.username
+                    ? authUser.username
+                    : message.reciever
+                }
+                reciever={
+                  message.sender !== authUser.username
+                    ? authUser.username
+                    : message.reciever
+                }
+                message={message.message}
+                time={message.time}
+              />
+            ))}
+          </div>
+        </>
+      ) : (
+        <div>No messages in the active chat</div>
+      )}
     </div>
+  ) : (
+    <div>No active chat</div>
   );
 };
 
