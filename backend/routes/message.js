@@ -45,20 +45,24 @@ router.post("/send/:id", protectRoute, async (req, res) => {
 });
 
 router.get("/:id", protectRoute, async (req, res) => {
-  const receiverId = req.params.id;
+  const chatId = req.params.id;
   const senderId = req.user._id;
 
-  const chat = await Chat.findOne({
-    participants: { $all: [senderId, receiverId] },
-  });
+  const chat = await Chat.findById(chatId);
 
-  if (!chat) return res.status(404).json({ error: "Chat doesnt exists" });
+  if (!chat) return res.status(404).json({ error: "Chat doesnt exist" });
 
   const messagePromises = chat.messages.map((id) => Message.findById(id));
   const messages = await Promise.all(messagePromises);
-  // format the messages
-  const reciever = await User.findById(receiverId);
 
+  // get the recieving party
+  const reciever = await User.findById(
+    chat.participants[0] === senderId
+      ? chat.participants[0]
+      : chat.participants[1]
+  );
+
+  // format the messages
   const formattedMessages = messages.map((message) => ({
     sender: req.user.username,
     reciever: reciever.username,
