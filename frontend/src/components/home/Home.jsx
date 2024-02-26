@@ -17,7 +17,6 @@ const Home = () => {
         const response = await fetch("/api/chats");
         const data = await response.json();
         setChats(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching chat data:", error);
       }

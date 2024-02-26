@@ -3,7 +3,6 @@ import Message from "../models/Message.js";
 import User from "../models/User.js";
 import Chat from "../models/Chat.js";
 import protectRoute from "../middleware/protectRoute.js";
-
 const router = express.Router();
 
 // sending messages
@@ -45,32 +44,36 @@ router.post("/send/:id", protectRoute, async (req, res) => {
 });
 
 router.get("/:id", protectRoute, async (req, res) => {
-  const chatId = req.params.id;
-  const senderId = req.user._id;
+  try {
+    const chatId = req.params.id;
+    const senderId = req.user._id;
 
-  const chat = await Chat.findById(chatId);
+    const chat = await Chat.findById(chatId);
 
-  if (!chat) return res.status(404).json({ error: "Chat doesnt exist" });
+    if (!chat) return res.status(404).json({ error: "Chat doesnt exist" });
 
-  const messagePromises = chat.messages.map((id) => Message.findById(id));
-  const messages = await Promise.all(messagePromises);
+    const messagePromises = chat.messages.map((id) => Message.findById(id));
+    const messages = await Promise.all(messagePromises);
 
-  // get the recieving party
-  const reciever = await User.findById(
-    chat.participants[0] === senderId
-      ? chat.participants[0]
-      : chat.participants[1]
-  );
+    // get the recieving party
+    const reciever = await User.findById(
+      chat.participants[0] === senderId
+        ? chat.participants[0]
+        : chat.participants[1]
+    );
 
-  // format the messages
-  const formattedMessages = messages.map((message) => ({
-    sender: req.user.username,
-    reciever: reciever.username,
-    message: message.content,
-    time: new Date(message.createdAt).toLocaleString(),
-  }));
-
-  return res.status(201).json(formattedMessages);
+    // format the messages
+    const formattedMessages = messages.map((message) => ({
+      sender: req.user.username,
+      reciever: reciever.username,
+      message: message.content,
+      time: new Date(message.createdAt).toLocaleString(),
+    }));
+    console.log(formattedMessages);
+    return res.status(200).json(formattedMessages);
+  } catch (error) {
+    console.log("error: ", error);
+  }
 });
 
 export default router;

@@ -1,27 +1,16 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import useLogin from "../../hooks/useLogin";
 import "./login.css";
 
 const login = () => {
+  const [loading, login] = useLogin();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    const credentials = {
-      username: username,
-      password: password,
-    };
-
-    const response = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credentials),
-    });
-
-    const data = await response.json();
-
+    await login(username, password);
     setPassword("");
     setUsername("");
   };

@@ -19,6 +19,7 @@ const MessageContainer = ({}) => {
         }
       } catch (error) {
         console.error("Error fetching chat data:", error);
+        console.error("Response:", response);
       }
     };
 

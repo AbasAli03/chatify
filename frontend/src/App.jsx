@@ -4,9 +4,8 @@ import Signup from "./components/signup/Signup.jsx";
 import Home from "./components/home/Home.jsx";
 import Login from "./components/login/Login.jsx";
 import { Toaster } from "react-hot-toast";
-import { useAuthContext } from "./context/authContext.jsx";
 import { ChatContextProvider } from "./context/ChatContext.jsx";
-
+import { useAuthContext } from "./context/AuthContext.jsx";
 import "./app.css";
 
 function App() {
