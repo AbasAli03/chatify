@@ -2,11 +2,18 @@ import React from "react";
 import "./chat.css";
 import { useChatContext } from "../../../context/ChatContext.jsx";
 
-const Chat = ({ username, sentBy, lastMessage, timeSent, id }) => {
+const Chat = ({
+  username,
+  sentBy,
+  lastMessage,
+  timeSent,
+  id,
+  participantId,
+}) => {
   const { setActiveChat } = useChatContext();
 
   const handleChatClick = () => {
-    setActiveChat(id);
+    setActiveChat({ chatId: id, participantId: participantId });
   };
 
   return (

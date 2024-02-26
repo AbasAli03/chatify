@@ -9,7 +9,7 @@ import { useAuthContext } from "./context/AuthContext.jsx";
 import "./app.css";
 
 function App() {
-  const { authUser, setAuthUser } = useAuthContext();
+  const { authUser } = useAuthContext();
 
   return (
     <>

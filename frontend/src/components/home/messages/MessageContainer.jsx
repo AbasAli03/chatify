@@ -13,7 +13,7 @@ const MessageContainer = ({}) => {
     const fetchData = async () => {
       try {
         if (activeChat !== null) {
-          const response = await fetch(`/api/messages/${activeChat}`);
+          const response = await fetch(`/api/messages/${activeChat.chatId}`);
           const data = await response.json();
           setMessages(data);
         }
@@ -32,23 +32,15 @@ const MessageContainer = ({}) => {
         <>
           <header className="messageContainer__header">
             {messages[0].sender !== authUser.username
-              ? authUser.username
+              ? messages[0].sender
               : messages[0].reciever}
           </header>
           <div className="messageContainer__messages">
             {messages.map((message, index) => (
               <Message
                 key={index}
-                sender={
-                  message.sender === authUser.username
-                    ? authUser.username
-                    : message.reciever
-                }
-                reciever={
-                  message.sender !== authUser.username
-                    ? authUser.username
-                    : message.reciever
-                }
+                sender={message.sender}
+                reciever={message.reciever}
                 message={message.message}
                 time={message.time}
               />

@@ -39,6 +39,10 @@ router.get("/", protectRoute, async (req, res) => {
               time: new Date(lastMessage.createdAt).toLocaleString(),
               sentBy: senderOfLastMessage.username,
             },
+            participantId:
+              chat.participants[0] === requestingUser
+                ? chat.participants[1]
+                : chat.participants[0],
           };
         } catch (error) {
           console.error("Error fetching message details:", error);

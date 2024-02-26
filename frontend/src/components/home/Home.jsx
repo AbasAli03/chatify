@@ -41,6 +41,7 @@ const Home = () => {
             lastMessage={chat.lastMessage.content}
             timeSent={chat.lastMessage.time}
             id={chat.id}
+            participantId={chat.participantId}
           />
         ))}
       </div>

@@ -63,12 +63,20 @@ router.get("/:id", protectRoute, async (req, res) => {
     );
 
     // format the messages
-    const formattedMessages = messages.map((message) => ({
-      sender: req.user.username,
-      reciever: reciever.username,
-      message: message.content,
-      time: new Date(message.createdAt).toLocaleString(),
-    }));
+    const formattedMessages = await Promise.all(
+      messages.map(async (message) => {
+        const receiver = await User.findById(message.reciever);
+        const sender = await User.findById(message.sender);
+
+        return {
+          sender: sender.username,
+          receiver: receiver.username,
+          message: message.content,
+          time: new Date(message.createdAt).toLocaleString(),
+        };
+      })
+    );
+
     console.log(formattedMessages);
     return res.status(200).json(formattedMessages);
   } catch (error) {
