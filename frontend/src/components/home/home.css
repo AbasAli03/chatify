@@ -19,3 +19,12 @@
   flex: 0.7;
   height: 100%;
 }
+
+.home__chats > :last-child {
+  height: 2rem;
+  margin-top: auto;
+  cursor: pointer;
+  background-color: #1e71f7;
+  border-radius: 10px;
+  border: none;
+}

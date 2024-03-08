@@ -4,10 +4,22 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-color: #f8f8ff;
+}
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
+.logo img {
+  width: 200px;
+  height: auto;
+}
 .signup__elements {
   padding: 20px;
+  width: 25%;
 }
 .signup__input {
   margin-bottom: 20px;
@@ -24,21 +36,29 @@ h1 {
   width: 100%;
   border: none;
 
-  border-radius: 20px;
-  background-color: black;
+  border-radius: 10px;
+  background-color: #1e71f7;
   color: white;
   border: 1px solid white;
 }
 .signup__button:hover {
-  background-color: white;
-  color: black;
-  border: 1px solid black;
   cursor: pointer;
 }
 input {
   width: 100%;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
 }
 
+/* Styling for focused input */
+input:focus {
+  outline: none;
+  border-color: #1e71f7;
+  box-shadow: 0 0 5px rgba(30, 113, 247, 0.5);
+}
 .link {
   color: black;
   text-decoration: none;

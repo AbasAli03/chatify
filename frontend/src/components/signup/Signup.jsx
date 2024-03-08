@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import useSignup from "../../hooks/useSignup";
+import logo from "../../Assets/logo.png";
 import "./signup.css";
 
 const Signup = () => {
@@ -16,6 +17,9 @@ const Signup = () => {
 
   return (
     <div className="signup">
+      <div className="logo">
+        <img src={logo} alt="Logo" />
+      </div>
       <div className="signup__elements">
         <div className="signup__input">
           <h1>Fullname</h1>

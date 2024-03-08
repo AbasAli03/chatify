@@ -6,10 +6,12 @@ import MessageContainer from "./messages/MessageContainer.jsx";
 import { useChatContext } from "../../context/ChatContext.jsx";
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../context/AuthContext.jsx";
+import useLogout from "../../hooks/useLogout.js";
 
 const Home = () => {
   const [chats, setChats] = useState([]);
-  const { authUser } = useAuthContext();
+  const { authUser, setAuthUser } = useAuthContext();
+  const { loading, logout } = useLogout();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +47,7 @@ const Home = () => {
             participantId={chat.participantId}
           />
         ))}
+        <button onClick={logout}>Logout</button>
       </div>
       <div className="home__activeChat">
         <MessageContainer />
