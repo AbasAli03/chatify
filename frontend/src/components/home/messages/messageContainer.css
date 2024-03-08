@@ -1,19 +1,28 @@
-/* messageContainer.css */
-
 .messageContainer {
-  width: 100%;
-  height: 100vh;
   border: 1px solid #ccc;
+  padding: 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .messageContainer__header {
-  background-color: #f0f0f0;
+  height: 50px;
   padding: 10px;
-  font-weight: bold;
+  border-bottom: #1e71f7 1px solid;
 }
 
 .messageContainer__messages {
-  height: calc(100%);
-  overflow: auto;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.messageContainer__input {
+  height: 2rem;
+  align-items: flex-end;
+  padding: 10px;
+  font-size: 0.9rem;
 }

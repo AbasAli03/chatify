@@ -29,6 +29,7 @@ const Home = () => {
     <div className="home">
       <div className="home__chats">
         <SearchBar />
+
         {chats.map((chat) => (
           <Chat
             key={chat.id}
