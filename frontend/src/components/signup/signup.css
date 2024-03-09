@@ -19,16 +19,10 @@
 }
 .signup__elements {
   padding: 20px;
-  width: 25%;
 }
 .signup__input {
   margin-bottom: 20px;
   text-align: left;
-}
-
-h1 {
-  font-size: 16px;
-  font-family: sans-serif;
 }
 
 .signup__button {
@@ -44,6 +38,11 @@ h1 {
 .signup__button:hover {
   cursor: pointer;
 }
+
+h1 {
+  font-size: 1.2rem;
+}
+
 input {
   width: 100%;
   font-size: 1rem;
@@ -53,7 +52,6 @@ input {
   transition: border-color 0.3s;
 }
 
-/* Styling for focused input */
 input:focus {
   outline: none;
   border-color: #1e71f7;

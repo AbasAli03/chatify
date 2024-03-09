@@ -55,7 +55,7 @@ const Signup = () => {
           />
         </div>
         <Link to="/login" className="link">
-          Dont have an account?
+          Already have an account?
         </Link>
         <button className="signup__button" onClick={handleSignup}>
           Sign Up

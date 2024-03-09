@@ -3,14 +3,13 @@ import "./home.css";
 import Chat from "./sidebar/Chat.jsx";
 import SearchBar from "./sidebar/SearchBar.jsx";
 import MessageContainer from "./messages/MessageContainer.jsx";
-import { useChatContext } from "../../context/ChatContext.jsx";
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../context/AuthContext.jsx";
 import useLogout from "../../hooks/useLogout.js";
 
 const Home = () => {
   const [chats, setChats] = useState([]);
-  const { authUser, setAuthUser } = useAuthContext();
+  const { authUser } = useAuthContext();
   const { loading, logout } = useLogout();
 
   useEffect(() => {

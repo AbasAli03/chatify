@@ -27,7 +27,6 @@ const useSignup = () => {
       if (data.error) {
         toast.error(data.error);
       }
-      localStorage.removeItem("authUser");
       localStorage.setItem("authUser", JSON.stringify(data));
       setAuthUser(data);
     } catch (error) {
