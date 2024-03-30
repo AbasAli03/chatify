@@ -5,7 +5,7 @@ import { useAuthContext } from "../../../context/AuthContext.jsx";
 const Message = ({ sender, reciever, message, time }) => {
   const { authUser } = useAuthContext();
 
-  return sender !== authUser.username ? (
+  return sender !== authUser.id ? (
     <div className="message message-start">
       <div className="message-bubble">{message}</div>
     </div>

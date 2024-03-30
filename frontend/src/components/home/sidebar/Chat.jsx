@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./chat.css";
 import { useChatContext } from "../../../context/ChatContext.jsx";
 import { useSocketContext } from "../../../context/SocketContext.jsx";
+import { useAuthContext } from "../../../context/AuthContext.jsx";
 
 const Chat = ({
   username,
@@ -10,13 +11,19 @@ const Chat = ({
   timeSent,
   id,
   participantId,
+  participantName,
 }) => {
   const { setActiveChat } = useChatContext();
   const { onlineUsers } = useSocketContext();
   const [isOnline, setIsOnline] = useState();
+  const { authUser } = useAuthContext();
 
   const handleChatClick = () => {
-    setActiveChat({ chatId: id, participantId: participantId });
+    setActiveChat({
+      chatId: id,
+      participantId: participantId,
+      participantName: participantName,
+    });
   };
   useEffect(() => {
     setIsOnline(onlineUsers.includes(participantId));
@@ -30,7 +37,7 @@ const Chat = ({
         {username}
       </h4>
       <p className="chat__lastMessage">
-        {sentBy === username ? "you: " : `${sentBy}:`} {lastMessage}
+        {sentBy === authUser.id ? "you: " : `${participantName}:`} {lastMessage}
         <span className="chat__timeSent">{timeSent}</span>
       </p>
     </div>

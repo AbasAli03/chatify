@@ -34,16 +34,13 @@ const Home = () => {
         {chats.map((chat) => (
           <Chat
             key={chat.id}
-            username={
-              chat.receiver === authUser.username
-                ? chat.lastMessage.sentBy
-                : chat.receiver
-            }
+            username={chat.participantName}
             sentBy={chat.lastMessage.sentBy}
             lastMessage={chat.lastMessage.content}
             timeSent={chat.lastMessage.time}
             id={chat.id}
             participantId={chat.participantId}
+            participantName={chat.participantName}
           />
         ))}
         <button onClick={logout}>Logout</button>

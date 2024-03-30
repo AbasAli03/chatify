@@ -12,7 +12,7 @@ router.get("/", protectRoute, async (req, res) => {
 
     const chats = await Chat.find({
       participants: requestingUser,
-    });
+    }).populate("messages");
 
     if (chats.length === 0) {
       return res.status(404).json({ error: "No chats exist" });
@@ -20,40 +20,26 @@ router.get("/", protectRoute, async (req, res) => {
 
     const formattedChats = await Promise.all(
       chats.map(async (chat) => {
-        try {
-          const lastMessageId = chat.messages[chat.messages.length - 1];
-
-          const lastMessage = await Message.findById(lastMessageId);
-
-          const senderOfLastMessage = await User.findById(lastMessage.sender);
-          const receiverOfLastMessage = await User.findById(
-            lastMessage.reciever
-          );
-
-          // Determine participant and receiver IDs
-          const participantId = chat.participants.find(
-            (participant) => participant !== requestingUser
-          );
-          const receiverId =
-            lastMessage.reciever === requestingUser
-              ? lastMessage.sender
-              : lastMessage.reciever;
-
-          return {
-            id: chat._id,
-            receiver: receiverOfLastMessage.username,
-            receiverId: receiverId,
-            lastMessage: {
-              content: lastMessage.content,
-              time: new Date(lastMessage.createdAt).toLocaleString(),
-              sentBy: senderOfLastMessage.username,
-            },
-            participantId: participantId,
-          };
-        } catch (error) {
-          console.error("Error fetching message details:", error);
-          throw error;
-        }
+        const lastMessage = chat.messages[chat.messages.length - 1];
+        const senderOfLastMessage = lastMessage.sender;
+        const receiverOfLastMessage = lastMessage.reciever;
+        const participantId =
+          requestingUser == lastMessage.sender
+            ? lastMessage.reciever
+            : lastMessage.sender;
+        const participant = await User.findById(participantId);
+        const participantName = participant.username;
+        return {
+          id: chat._id,
+          lastMessage: {
+            content: lastMessage.content,
+            time: lastMessage.createdAt,
+            sentBy: senderOfLastMessage,
+            receivedBy: receiverOfLastMessage,
+          },
+          participantId: participantId,
+          participantName: participantName,
+        };
       })
     );
 

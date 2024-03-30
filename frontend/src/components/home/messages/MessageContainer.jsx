@@ -62,12 +62,7 @@ const MessageContainer = ({}) => {
   return (
     <div className="messageContainer">
       <header className="messageContainer__header">
-        <h1>
-          {messages.length > 0 &&
-            (messages[0].sender === authUser.username
-              ? messages[0].receiver
-              : messages[0].sender)}
-        </h1>
+        <h1>{messages.length > 0 && activeChat.participantName}</h1>
       </header>
       <div className="messageContainer__messages" ref={messageContainerRef}>
         {messages.length > 0 ? (
@@ -75,7 +70,7 @@ const MessageContainer = ({}) => {
             <Message
               key={index}
               sender={message.sender}
-              receiver={message.receiver}
+              receiver={message.reciever}
               message={message.message}
               time={message.time}
             />

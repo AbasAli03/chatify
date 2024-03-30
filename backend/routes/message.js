@@ -12,11 +12,13 @@ router.post("/send/:id", protectRoute, async (req, res) => {
     const receiverId = req.params.id;
     const senderId = req.user._id;
 
-    let chat = await Chat.findOne({
-      $or: [
-        { participants: { $all: [senderId, receiverId] } },
-        { participants: { $all: [receiverId, senderId] } },
-      ],
+    let chat = await Chat.find({
+      participants: {
+        $in: [
+          mongoose.Types.ObjectId(senderId),
+          mongoose.Types.ObjectId(receiverId),
+        ],
+      },
     });
 
     if (!chat) {
@@ -33,8 +35,7 @@ router.post("/send/:id", protectRoute, async (req, res) => {
       chat.messages.push(newMessage._id);
     }
 
-    await newMessage.save();
-    await chat.save();
+    await Promise.all([chat.save(), newMessage.save()]);
 
     res.status(201).json(newMessage);
   } catch (error) {
@@ -46,41 +47,26 @@ router.post("/send/:id", protectRoute, async (req, res) => {
 router.get("/:id", protectRoute, async (req, res) => {
   try {
     const chatId = req.params.id;
-    const senderId = req.user._id;
+    const requestingUser = req.user._id;
 
-    const chat = await Chat.findById(chatId);
+    const chat = await Chat.findById(chatId).populate("messages");
 
     if (!chat) return res.status(404).json({ error: "Chat doesnt exist" });
 
-    const messagePromises = chat.messages.map((id) => Message.findById(id));
-    const messages = await Promise.all(messagePromises);
+    const formattedMessages = chat.messages.map((message) => {
+      return {
+        sender: message.sender,
+        receiver: message.reciever,
+        message: message.content,
+        time: new Date(message.createdAt).toLocaleString(),
+      };
+    });
 
-    // get the recieving party
-    const reciever = await User.findById(
-      chat.participants[0] === senderId
-        ? chat.participants[0]
-        : chat.participants[1]
-    );
-
-    // format the messages
-    const formattedMessages = await Promise.all(
-      messages.map(async (message) => {
-        const receiver = await User.findById(message.reciever);
-        const sender = await User.findById(message.sender);
-
-        return {
-          sender: sender.username,
-          receiver: receiver.username,
-          message: message.content,
-          time: new Date(message.createdAt).toLocaleString(),
-        };
-      })
-    );
+    console.log(formattedMessages);
 
     return res.status(200).json(formattedMessages);
   } catch (error) {
     console.log("error: ", error);
   }
 });
-
 export default router;
