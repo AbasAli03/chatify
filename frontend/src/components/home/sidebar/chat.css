@@ -8,10 +8,25 @@
 
 .chat__username .chat__lastMessage {
   padding: 5px;
-}
-.chat__username {
   margin-bottom: 0.1rem;
 }
+.chat__username-online {
+  position: relative;
+}
+
+.chat__username-online::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: calc(100% - 1ch);
+
+  transform: translateY(-50%);
+  background-color: green;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
 .chat__lastMessage {
   display: flex;
   justify-content: space-between;
@@ -21,9 +36,4 @@
   color: white;
   background-color: #1e71f7;
   cursor: pointer;
-}
-
-.chat:after {
-  color: white;
-  background-color: #1e71f7;
 }

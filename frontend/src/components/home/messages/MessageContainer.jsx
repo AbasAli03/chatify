@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Message from "./Message.jsx";
 import "./messageContainer.css";
 import { useChatContext } from "../../../context/ChatContext.jsx";
@@ -9,6 +9,15 @@ const MessageContainer = ({}) => {
   const { activeChat } = useChatContext();
   const { authUser } = useAuthContext();
   const [message, setMessage] = useState("");
+  const messageContainerRef = useRef();
+
+  useEffect(() => {
+    // Scroll to the bottom of the container after
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop =
+        messageContainerRef.current.scrollHeight;
+    }
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,7 +69,7 @@ const MessageContainer = ({}) => {
               : messages[0].sender)}
         </h1>
       </header>
-      <div className="messageContainer__messages">
+      <div className="messageContainer__messages" ref={messageContainerRef}>
         {messages.length > 0 ? (
           messages.map((message, index) => (
             <Message

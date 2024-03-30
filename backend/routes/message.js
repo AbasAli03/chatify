@@ -77,7 +77,6 @@ router.get("/:id", protectRoute, async (req, res) => {
       })
     );
 
-    console.log(formattedMessages);
     return res.status(200).json(formattedMessages);
   } catch (error) {
     console.log("error: ", error);

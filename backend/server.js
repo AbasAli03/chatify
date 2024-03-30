@@ -6,8 +6,19 @@ import chat from "./routes/chat.js";
 import cors from "cors";
 import connectToMongoDB from "./db/connectToMongoDB.js";
 import cookieParser from "cookie-parser";
+import { Server } from "socket.io";
+import http from "http";
 
 const app = express();
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: ["http://localhost:3000"],
+    methods: ["GET", "POST"],
+  },
+});
+
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
@@ -19,7 +30,26 @@ app.use("/api/auth", auth);
 app.use("/api/messages", message);
 app.use("/api/chats", chat);
 
-app.listen(5000, () => {
+const users = {};
+
+io.on("connection", (socket) => {
+  // get the user from the handshake
+  const userId = socket.handshake.query.userId;
+  if (userId) {
+    users[userId] = socket.id;
+  }
+  console.log(users);
+
+  // emit the online users to all users
+  io.emit("onlineUsers", Object.keys(users));
+
+  socket.on("disconnect", () => {
+    delete users[userId];
+    io.emit("onlineUsers", Object.keys(users));
+  });
+});
+
+server.listen(PORT, () => {
   connectToMongoDB();
   console.log("server is runnning  ON ", PORT);
 });

@@ -26,23 +26,29 @@ router.get("/", protectRoute, async (req, res) => {
           const lastMessage = await Message.findById(lastMessageId);
 
           const senderOfLastMessage = await User.findById(lastMessage.sender);
-          const recieverOfLastMessage = await User.findById(
+          const receiverOfLastMessage = await User.findById(
             lastMessage.reciever
           );
 
+          // Determine participant and receiver IDs
+          const participantId = chat.participants.find(
+            (participant) => participant !== requestingUser
+          );
+          const receiverId =
+            lastMessage.reciever === requestingUser
+              ? lastMessage.sender
+              : lastMessage.reciever;
+
           return {
             id: chat._id,
-            receiver: recieverOfLastMessage.username,
-            receiverId: lastMessage.reciever,
+            receiver: receiverOfLastMessage.username,
+            receiverId: receiverId,
             lastMessage: {
               content: lastMessage.content,
               time: new Date(lastMessage.createdAt).toLocaleString(),
               sentBy: senderOfLastMessage.username,
             },
-            participantId:
-              chat.participants[0] === requestingUser
-                ? chat.participants[1]
-                : chat.participants[0],
+            participantId: participantId,
           };
         } catch (error) {
           console.error("Error fetching message details:", error);
@@ -51,7 +57,7 @@ router.get("/", protectRoute, async (req, res) => {
       })
     );
 
-    res.status(201).json(formattedChats);
+    res.json(formattedChats);
   } catch (error) {
     console.error("Error fetching chats:", error);
     res.status(500).json({ error: "Internal Server Error" });
