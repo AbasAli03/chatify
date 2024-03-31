@@ -9,7 +9,6 @@ const router = express.Router();
 router.get("/", protectRoute, async (req, res) => {
   try {
     const requestingUser = req.user._id;
-
     const chats = await Chat.find({
       participants: requestingUser,
     }).populate("messages");
@@ -20,26 +19,42 @@ router.get("/", protectRoute, async (req, res) => {
 
     const formattedChats = await Promise.all(
       chats.map(async (chat) => {
-        const lastMessage = chat.messages[chat.messages.length - 1];
-        const senderOfLastMessage = lastMessage.sender;
-        const receiverOfLastMessage = lastMessage.reciever;
         const participantId =
-          requestingUser == lastMessage.sender
-            ? lastMessage.reciever
-            : lastMessage.sender;
+          requestingUser.toString() === chat.participants[0].toString()
+            ? chat.participants[1].toString()
+            : chat.participants[0].toString();
+
         const participant = await User.findById(participantId);
         const participantName = participant.username;
-        return {
-          id: chat._id,
-          lastMessage: {
-            content: lastMessage.content,
-            time: lastMessage.createdAt,
-            sentBy: senderOfLastMessage,
-            receivedBy: receiverOfLastMessage,
-          },
-          participantId: participantId,
-          participantName: participantName,
-        };
+        if (chat.messages.length > 0) {
+          const lastMessage = chat.messages[chat.messages.length - 1];
+          const senderOfLastMessage = lastMessage.sender;
+          const receiverOfLastMessage = lastMessage.reciever;
+
+          return {
+            id: chat._id,
+            lastMessage: {
+              content: lastMessage.content,
+              time: lastMessage.createdAt,
+              sentBy: senderOfLastMessage,
+              receivedBy: receiverOfLastMessage,
+            },
+            participantId: participantId.toString(),
+            participantName: participantName,
+          };
+        } else {
+          return {
+            id: chat._id,
+            lastMessage: {
+              content: "Send a message",
+              time: "",
+              sentBy: "",
+              receivedBy: "",
+            },
+            participantId: participantId,
+            participantName: participantName,
+          };
+        }
       })
     );
 

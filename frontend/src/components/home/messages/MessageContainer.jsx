@@ -3,14 +3,16 @@ import Message from "./Message.jsx";
 import "./messageContainer.css";
 import { useChatContext } from "../../../context/ChatContext.jsx";
 import { useAuthContext } from "../../../context/AuthContext.jsx";
+import useListener from "../../../hooks/useListener.js";
+import { useMessage } from "../../../context/MessageContext.jsx";
 
 const MessageContainer = ({}) => {
-  const [messages, setMessages] = useState([]);
+  const { messages, setMessages } = useMessage();
   const { activeChat } = useChatContext();
   const { authUser } = useAuthContext();
   const [message, setMessage] = useState("");
   const messageContainerRef = useRef();
-
+  useListener();
   useEffect(() => {
     // Scroll to the bottom of the container after
     if (messageContainerRef.current) {
@@ -51,12 +53,12 @@ const MessageContainer = ({}) => {
         );
 
         const data = await response.json();
+        setMessages((prevMessages) => [...prevMessages, data]);
       }
     } catch (error) {
       console.error("Error fetching chat data:", error);
       console.error("Response:", response);
     }
-
     setMessage("");
   };
   return (
@@ -71,7 +73,7 @@ const MessageContainer = ({}) => {
               key={index}
               sender={message.sender}
               receiver={message.reciever}
-              message={message.message}
+              message={message.content}
               time={message.time}
             />
           ))

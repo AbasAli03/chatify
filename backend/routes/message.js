@@ -3,6 +3,8 @@ import Message from "../models/Message.js";
 import User from "../models/User.js";
 import Chat from "../models/Chat.js";
 import protectRoute from "../middleware/protectRoute.js";
+import mongoose from "mongoose";
+import { getSocketId, io } from "../server.js";
 const router = express.Router();
 
 // sending messages
@@ -12,17 +14,14 @@ router.post("/send/:id", protectRoute, async (req, res) => {
     const receiverId = req.params.id;
     const senderId = req.user._id;
 
-    let chat = await Chat.find({
-      participants: {
-        $in: [
-          mongoose.Types.ObjectId(senderId),
-          mongoose.Types.ObjectId(receiverId),
-        ],
-      },
+    let chat = await Chat.findOne({
+      participants: { $all: [senderId, receiverId] },
     });
 
     if (!chat) {
-      chat = new Chat({ participants: [senderId, receiverId] });
+      chat = await Chat.create({
+        participants: [senderId, receiverId],
+      });
     }
 
     const newMessage = new Message({
@@ -37,7 +36,19 @@ router.post("/send/:id", protectRoute, async (req, res) => {
 
     await Promise.all([chat.save(), newMessage.save()]);
 
-    res.status(201).json(newMessage);
+    const receiverSocketId = getSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
+
+    const responseMessage = {
+      sender: newMessage.sender,
+      receiver: newMessage.reciever,
+      content: newMessage.content,
+      time: new Date(newMessage.createdAt).toLocaleString(),
+    };
+
+    res.status(201).json(responseMessage);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -57,12 +68,10 @@ router.get("/:id", protectRoute, async (req, res) => {
       return {
         sender: message.sender,
         receiver: message.reciever,
-        message: message.content,
+        content: message.content,
         time: new Date(message.createdAt).toLocaleString(),
       };
     });
-
-    console.log(formattedMessages);
 
     return res.status(200).json(formattedMessages);
   } catch (error) {
