@@ -37,6 +37,7 @@ const MessageContainer = ({}) => {
 
     fetchData();
   }, [activeChat]);
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
     try {

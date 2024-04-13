@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import auth from "./routes/auth.js";
 import message from "./routes/message.js";
 import chat from "./routes/chat.js";
+import user from "./routes/user.js";
 import cors from "cors";
 import connectToMongoDB from "./db/connectToMongoDB.js";
 import cookieParser from "cookie-parser";
@@ -29,6 +30,7 @@ const PORT = process.env.PORT || 5000;
 app.use("/api/auth", auth);
 app.use("/api/messages", message);
 app.use("/api/chats", chat);
+app.use("/api/users", user);
 
 export const getSocketId = (receiverId) => {
   return users[receiverId];
