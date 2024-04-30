@@ -5,23 +5,37 @@ import { useChatContext } from "../../../context/ChatContext";
 const SearchItems = ({ data }) => {
   const { activeChat, setActiveChat } = useChatContext();
 
-  const handleClick = (id, username) => {
-    setActiveChat({
-      chatId: id,
-      participantId: "",
-      participantName: username,
-    });
+  const handleClick = async (id, username) => {
+    try {
+      const response = await fetch(`/api/chats/${id}`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      setActiveChat({
+        chatId: data.id,
+        participantId: id,
+        participantName: username,
+      });
+    } catch (error) {
+      console.error("Error during fetch:", error);
+    }
   };
 
   return (
-    <div>
+    <>
       {data &&
-        data.map((item) => {
+        data.map((item, index) => {
+          const key = item._id || index;
           return (
             <li
-              key={item.id}
+              key={key}
+              tabIndex={index}
               className="searchItem"
-              onClick={() => handleClick(item._id, item.username)}
+              onClick={async () => await handleClick(item._id, item.username)}
             >
               <h1>{item.username}</h1>
               <p>{item.fullname}</p>
@@ -29,8 +43,7 @@ const SearchItems = ({ data }) => {
             </li>
           );
         })}
-    </div>
+    </>
   );
 };
-
 export default SearchItems;

@@ -18,7 +18,6 @@ const SearchBar = () => {
     if (searchText.trim() !== "") {
       fetchData();
     } else {
-      // If searchText is empty, reset userData
       setUserData(null);
     }
   }, [searchText]);
@@ -39,7 +38,6 @@ const SearchBar = () => {
           alt="Search Icon"
         />
       </div>
-      {/* Conditionally render the .users div only when searchText is not empty */}
       {searchText.trim() !== "" && (
         <ul className="users">
           <SearchItems data={userData} />

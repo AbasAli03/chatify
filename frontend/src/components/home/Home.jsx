@@ -17,7 +17,12 @@ const Home = () => {
       try {
         const response = await fetch("/api/chats");
         const data = await response.json();
-        setChats(data);
+
+        if (data.error) {
+          setChats([]);
+        } else {
+          setChats(data);
+        }
       } catch (error) {
         console.error("Error fetching chat data:", error);
       }

@@ -1,8 +1,8 @@
 import express from "express";
-import Message from "../models/Message.js";
 import User from "../models/User.js";
 import Chat from "../models/Chat.js";
 import protectRoute from "../middleware/protectRoute.js";
+import mongoose from "mongoose";
 
 const router = express.Router();
 
@@ -61,6 +61,57 @@ router.get("/", protectRoute, async (req, res) => {
     res.json(formattedChats);
   } catch (error) {
     console.error("Error fetching chats:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/:id", protectRoute, async (req, res) => {
+  try {
+    const requestingUser = req.user._id;
+    const id = req.params.id;
+
+    const chat = await Chat.find({
+      participants: { $all: [id.toString(), requestingUser.toString()] },
+    }).populate("messages");
+
+    if (chat[0]) {
+      const participantId =
+        requestingUser.toString() === chat[0].participants[0].toString()
+          ? chat[0].participants[1].toString()
+          : chat[0].participants[0].toString();
+
+      const participant = await User.findById(participantId);
+      const participantName = participant.username;
+
+      const lastMessage =
+        chat[0].messages.length > 0
+          ? chat[0].messages[chat[0].messages.length - 1]
+          : {
+              content: "Send a message",
+              createdAt: "",
+              sender: "",
+              reciever: "",
+            };
+
+      const response = {
+        id: chat[0]._id,
+        lastMessage: {
+          content: lastMessage.content,
+          time: lastMessage.createdAt,
+          sentBy: lastMessage.sender,
+          receivedBy: lastMessage.reciever,
+        },
+        participantId: participantId.toString(),
+        participantName: participantName,
+      };
+
+      res.status(200).json(response);
+    } else {
+      const newChat = await Chat.create({ participants: [requestingUser, id] });
+      res.status(201).json(newChat);
+    }
+  } catch (error) {
+    console.error("Error:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
