@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./chat.css";
 import { useChatContext } from "../../../context/ChatContext.jsx";
 import { useSocketContext } from "../../../context/SocketContext.jsx";
 import { useAuthContext } from "../../../context/AuthContext.jsx";
@@ -30,15 +29,18 @@ const Chat = ({
   }, [onlineUsers]);
 
   return (
-    <div className="chat" onClick={handleChatClick}>
+    <div
+      className="max-h-[100px] max-w-96 hover:bg-[#1e71f7] hover:cursor-pointer p-2 rounded "
+      onClick={handleChatClick}
+    >
       <h4
         className={`${isOnline ? "chat__username-online" : "chat__username"}`}
       >
         {username}
       </h4>
-      <p className="chat__lastMessage">
+      <p className="flex justify-between grow overflow-hidden">
         {sentBy === authUser.id ? "you: " : `${participantName}:`} {lastMessage}
-        <span className="chat__timeSent">{timeSent}</span>
+        <span className="">{timeSent}</span>
       </p>
     </div>
   );

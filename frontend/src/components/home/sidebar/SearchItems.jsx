@@ -1,5 +1,4 @@
 import React from "react";
-import "./searchItems.css";
 import { useChatContext } from "../../../context/ChatContext";
 
 const SearchItems = ({ data }) => {

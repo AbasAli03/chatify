@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import Message from "./Message.jsx";
-import "./messageContainer.css";
 import { useChatContext } from "../../../context/ChatContext.jsx";
 import { useAuthContext } from "../../../context/AuthContext.jsx";
 import useListener from "../../../hooks/useListener.js";
@@ -63,11 +62,14 @@ const MessageContainer = ({}) => {
     setMessage("");
   };
   return (
-    <div className="messageContainer">
-      <header className="messageContainer__header">
+    <div className="h-full flex flex-col gap-4">
+      <header className="text-3xl p-2 border-b">
         <h1>{messages.length > 0 && activeChat.participantName}</h1>
       </header>
-      <div className="messageContainer__messages" ref={messageContainerRef}>
+      <div
+        className="flex flex-col gap-2 grow flex-1 overflow-y-auto overflow-x-hidden"
+        ref={messageContainerRef}
+      >
         {messages.length > 0 ? (
           messages.map((message, index) => (
             <Message
@@ -87,7 +89,7 @@ const MessageContainer = ({}) => {
           type="text"
           name="message"
           placeholder="write a message..."
-          className="messageContainer__input"
+          className="mt-auto w-full p-2 border rounded"
           onChange={(e) => setMessage(e.target.value)}
           value={message}
         />
