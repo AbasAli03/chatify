@@ -35,7 +35,12 @@ const Home = () => {
 
   return (
     <div className="flex md:flex-row h-screen w-full flex-col wrap p-4 gap-4">
-      <div className="h-full flex flex-col md:flex-[1_1_30%] gap-4">
+      <div
+        className={`
+        ${chatId ? "hidden md:flex" : "flex md:hidden"} 
+        h-full flex-col md:flex-[1_1_30%] gap-4
+      `}
+      >
         <div>
           <SearchBar />
         </div>
@@ -65,13 +70,17 @@ const Home = () => {
           </button>
         </div>
       </div>
-      {chatId && (
-        <div className="md:block hidden md:flex-[1_1_70%]">
-          <MessageProvider>
-            <MessageContainer />
-          </MessageProvider>
-        </div>
-      )}
+
+      <div
+        className={`
+        ${chatId ? "block md:block" : "hidden md:block"} 
+        h-full flex-col md:flex-[1_1_70%] gap-4
+      `}
+      >
+        <MessageProvider>
+          <MessageContainer />
+        </MessageProvider>
+      </div>
     </div>
   );
 };
