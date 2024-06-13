@@ -6,11 +6,13 @@ import { useState, useEffect } from "react";
 import { useAuthContext } from "../context/AuthContext.jsx";
 import useLogout from "../hooks/useLogout.js";
 import { MessageProvider } from "../context/MessageContext.jsx";
+import { useParams } from "react-router-dom";
 
 const Home = () => {
   const [chats, setChats] = useState([]);
   const { authUser } = useAuthContext();
   const { loading, logout } = useLogout();
+  const { chatId } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,12 +34,12 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="h-screen w-full flex wrap p-4 gap-4">
-      <div className="h-full flex flex-col flex-[1_1_30%] gap-4">
+    <div className="flex md:flex-row h-screen w-full flex-col wrap p-4 gap-4">
+      <div className="h-full flex flex-col md:flex-[1_1_30%] gap-4">
         <div>
           <SearchBar />
         </div>
-        <div className="flex flex-col gap-2 flex-1 overflow-y-auto">
+        <div className="flex flex-col gap-2 flex-1 overflow-y-auto wrap">
           {chats.length === 0
             ? "no chats"
             : chats.map((chat) => (
@@ -54,18 +56,22 @@ const Home = () => {
               ))}
         </div>
 
-        <div className="mt-auto">
-          <button className="p-2 bg-[#1e71f7] rounded" onClick={logout}>
+        <div className="mt-auto flex flex-col justify-center items-center">
+          <button
+            className="p-2 bg-[#1e71f7] rounded text-white w-full "
+            onClick={logout}
+          >
             Logout
           </button>
         </div>
       </div>
-
-      <div className="flex-[1_1_70%] ">
-        <MessageProvider>
-          <MessageContainer />
-        </MessageProvider>
-      </div>
+      {chatId && (
+        <div className="md:block hidden md:flex-[1_1_70%]">
+          <MessageProvider>
+            <MessageContainer />
+          </MessageProvider>
+        </div>
+      )}
     </div>
   );
 };

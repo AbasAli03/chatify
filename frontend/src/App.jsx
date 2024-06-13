@@ -36,6 +36,18 @@ function App() {
               )
             }
           ></Route>
+          <Route
+            path="/:chatId"
+            element={
+              authUser ? (
+                <ChatContextProvider>
+                  <Home />
+                </ChatContextProvider>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          ></Route>
         </Routes>
       </BrowserRouter>
       <Toaster />

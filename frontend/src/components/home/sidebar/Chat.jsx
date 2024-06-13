@@ -30,7 +30,7 @@ const Chat = ({
 
   return (
     <div
-      className="max-h-[100px] max-w-96 hover:bg-[#1e71f7] hover:cursor-pointer p-2 rounded "
+      className="min-h-[100px] hover:bg-[#1e71f7] hover:cursor-pointer p-2 rounded overflow-auto"
       onClick={handleChatClick}
     >
       <h4
@@ -38,7 +38,7 @@ const Chat = ({
       >
         {username}
       </h4>
-      <p className="flex justify-between grow overflow-hidden">
+      <p className="flex justify-between overflow-hidden break-all w-fit">
         {sentBy === authUser.id ? "you: " : `${participantName}:`} {lastMessage}
         <span className="">{timeSent}</span>
       </p>

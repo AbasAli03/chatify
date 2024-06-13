@@ -67,7 +67,7 @@ const MessageContainer = ({}) => {
         <h1>{messages.length > 0 && activeChat.participantName}</h1>
       </header>
       <div
-        className="flex flex-col gap-2 grow flex-1 overflow-y-auto overflow-x-hidden"
+        className="flex flex-col gap-2 grow flex-1 overflow-y-auto"
         ref={messageContainerRef}
       >
         {messages.length > 0 ? (
