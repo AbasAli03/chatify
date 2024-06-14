@@ -1,8 +1,11 @@
 import React from "react";
 import { useChatContext } from "../../../context/ChatContext";
+import convertISOToRegular from "../../../utils/DateFormatter";
+import { useNavigate } from "react-router-dom";
 
 const SearchItems = ({ data }) => {
   const { activeChat, setActiveChat } = useChatContext();
+  const navigate = useNavigate();
 
   const handleClick = async (id, username) => {
     try {
@@ -19,6 +22,7 @@ const SearchItems = ({ data }) => {
         participantId: id,
         participantName: username,
       });
+      navigate(`/${data.id}`);
     } catch (error) {
       console.error("Error during fetch:", error);
     }
@@ -33,12 +37,12 @@ const SearchItems = ({ data }) => {
             <li
               key={key}
               tabIndex={index}
-              className="searchItem"
+              className="flex flex-col mb-4 rounded p-4 list-none w-full hover:cursor-pointer hover:bg-[#1e71f7]"
               onClick={async () => await handleClick(item._id, item.username)}
             >
               <h1>{item.username}</h1>
               <p>{item.fullname}</p>
-              <p>Member since: {item.createdAt}</p>
+              <p>Member since: {convertISOToRegular(item.createdAt)}</p>
             </li>
           );
         })}

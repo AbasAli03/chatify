@@ -7,13 +7,12 @@ import { useAuthContext } from "../context/AuthContext.jsx";
 import useLogout from "../hooks/useLogout.js";
 import { MessageProvider } from "../context/MessageContext.jsx";
 import { useParams } from "react-router-dom";
-
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 const Home = () => {
   const [chats, setChats] = useState([]);
   const { authUser } = useAuthContext();
   const { loading, logout } = useLogout();
   const { chatId } = useParams();
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,12 +36,13 @@ const Home = () => {
     <div className="flex md:flex-row h-screen w-full flex-col wrap p-4 gap-4">
       <div
         className={`
-        ${chatId ? "hidden md:flex" : "flex md:hidden"} 
+        ${chatId ? "hidden md:flex" : "flex md:flex"} 
         h-full flex-col md:flex-[1_1_30%] gap-4
       `}
       >
-        <div>
+        <div className="flex items-center justify-between">
           <SearchBar />
+          <h4>{authUser.username}</h4>
         </div>
         <div className="flex flex-col gap-2 flex-1 overflow-y-auto wrap">
           {chats.length === 0
@@ -61,12 +61,13 @@ const Home = () => {
               ))}
         </div>
 
-        <div className="mt-auto flex flex-col justify-center items-center">
+        <div className="mt-auto ">
           <button
-            className="p-2 bg-[#1e71f7] rounded text-white w-full "
+            className="flex gap-2 text-center p-2 bg-[#1e71f7] rounded text-white  "
             onClick={logout}
           >
             Logout
+            <LogoutRoundedIcon />
           </button>
         </div>
       </div>
@@ -78,7 +79,7 @@ const Home = () => {
       `}
       >
         <MessageProvider>
-          <MessageContainer />
+          <MessageContainer chatId={chatId} />
         </MessageProvider>
       </div>
     </div>

@@ -22,8 +22,8 @@ const SearchBar = () => {
   }, [searchText]);
 
   return (
-    <div className="w-full">
-      <div className="w-[200px] relative">
+    <div className=" w-[70%] flex items-center relative ">
+      <div className="w-full relative">
         <input
           className="w-full p-2 border rounded"
           placeholder="Search for Users.."
@@ -38,7 +38,7 @@ const SearchBar = () => {
         />
       </div>
       {searchText.trim() !== "" && (
-        <ul className="users">
+        <ul className="mt-4 h-[400px] w-full flex flex-col p-4 z-50 bg-[#f0f4ff] overflow-auto rounded absolute left-0 top-[100%]">
           <SearchItems data={userData} />
         </ul>
       )}

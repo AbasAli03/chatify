@@ -4,8 +4,10 @@ import { useChatContext } from "../../../context/ChatContext.jsx";
 import { useAuthContext } from "../../../context/AuthContext.jsx";
 import useListener from "../../../hooks/useListener.js";
 import { useMessage } from "../../../context/MessageContext.jsx";
+import SendRoundedIcon from "@mui/icons-material/SendRounded";
+import IconButton from "@mui/material/IconButton";
 
-const MessageContainer = ({}) => {
+const MessageContainer = ({ chatId }) => {
   const { messages, setMessages } = useMessage();
   const { activeChat } = useChatContext();
   const { authUser } = useAuthContext();
@@ -24,7 +26,7 @@ const MessageContainer = ({}) => {
     const fetchData = async () => {
       try {
         if (activeChat !== null) {
-          const response = await fetch(`/api/messages/${activeChat.chatId}`);
+          const response = await fetch(`/api/messages/${chatId}`);
           const data = await response.json();
           setMessages(data);
         }
@@ -85,14 +87,19 @@ const MessageContainer = ({}) => {
         )}
       </div>
       <form onSubmit={(e) => handleSendMessage(e)}>
-        <input
-          type="text"
-          name="message"
-          placeholder="write a message..."
-          className="mt-auto w-full p-2 border rounded"
-          onChange={(e) => setMessage(e.target.value)}
-          value={message}
-        />
+        <div className="flex gap-4 items-center">
+          <input
+            type="text"
+            name="message"
+            placeholder="write a message..."
+            className="mt-auto w-full p-2 border rounded"
+            onChange={(e) => setMessage(e.target.value)}
+            value={message}
+          />
+          <IconButton type="submit">
+            <SendRoundedIcon sx={{ color: "#1e71f7" }} />
+          </IconButton>
+        </div>
       </form>
     </div>
   );

@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useChatContext } from "../../../context/ChatContext.jsx";
 import { useSocketContext } from "../../../context/SocketContext.jsx";
 import { useAuthContext } from "../../../context/AuthContext.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
+import convertISOToRegular from "../../../utils/DateFormatter.js";
 const Chat = ({
   username,
   sentBy,
@@ -12,12 +14,13 @@ const Chat = ({
   participantId,
   participantName,
 }) => {
-  const { setActiveChat } = useChatContext();
+  const { activeChat, setActiveChat } = useChatContext();
   const { onlineUsers } = useSocketContext();
   const [isOnline, setIsOnline] = useState();
   const { authUser } = useAuthContext();
-
+  const location = useLocation();
   const navigate = useNavigate();
+
   const handleChatClick = () => {
     setActiveChat({
       chatId: id,
@@ -32,18 +35,34 @@ const Chat = ({
 
   return (
     <div
-      className="min-h-[100px]  hover:bg-[#1e71f7] hover:cursor-pointer p-2 rounded overflow-auto"
+      className={`min-h-[100px] p-2 rounded overflow-auto ${
+        location.pathname.replace(/^\/+/g, "") === id
+          ? "bg-[#1e71f7]"
+          : "hover:bg-[#1e71f7] hover:cursor-pointer"
+      }`}
       onClick={handleChatClick}
     >
       <h4
-        className={`${isOnline ? "chat__username-online" : "chat__username"}`}
+        className={`${
+          isOnline
+            ? "flex justify-between items-center"
+            : "flex justify-between chat__username"
+        }`}
       >
         {username}
+        {isOnline && (
+          <span className="h-3 w-3 rounded-full bg-green-500"></span>
+        )}
       </h4>
-      <p className="flex justify-between overflow-hidden break-all w-fit">
-        {sentBy === authUser.id ? "you: " : `${participantName}:`} {lastMessage}
-        <span className="">{timeSent}</span>
-      </p>
+
+      <div className="flex justify-between items-center overflow-hidden break-all w-full">
+        <p>
+          {sentBy === authUser.id ? "you: " : `${participantName}:`}{" "}
+          {lastMessage}
+        </p>
+
+        <p>{convertISOToRegular(timeSent)}</p>
+      </div>
     </div>
   );
 };
