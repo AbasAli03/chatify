@@ -16,7 +16,7 @@ const login = () => {
   };
   return (
     <div className="flex flex-col justify-center items-center h-full w-full p-4 gap-4">
-      <div className="">
+      <div className="cursor-pointer">
         <img src={logo} alt="" />
       </div>
 
@@ -35,7 +35,7 @@ const login = () => {
         <div className="flex flex-col gap-4">
           <h1>Password</h1>
           <input
-            className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 "
+            className=" bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 "
             placeholder="*********"
             value={password}
             type="password"

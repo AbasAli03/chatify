@@ -25,7 +25,7 @@ function App() {
             element={authUser ? <Navigate to="/" /> : <Signup />}
           />
           <Route
-            path="/"
+            path="/:chatId?"
             element={
               authUser ? (
                 <ChatContextProvider>
@@ -35,19 +35,7 @@ function App() {
                 <Navigate to="/login" />
               )
             }
-          ></Route>
-          <Route
-            path="/:chatId"
-            element={
-              authUser ? (
-                <ChatContextProvider>
-                  <Home />
-                </ChatContextProvider>
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          ></Route>
+          />
         </Routes>
       </BrowserRouter>
       <Toaster />

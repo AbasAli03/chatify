@@ -42,7 +42,7 @@ const MessageContainer = ({ chatId }) => {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     try {
-      if (activeChat !== null) {
+      if (activeChat !== null && message !== "") {
         const response = await fetch(
           `/api/messages/send/${activeChat.participantId}`,
           {
