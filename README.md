@@ -74,6 +74,6 @@ npm run server
 Navigate to the `frontend` directory and start the server:
 
 ```bash
-cd fronted
+cd frontend
 npm run dev
 
